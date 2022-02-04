@@ -7,6 +7,17 @@ import logic from "../05-BLL/likes-logic";
 
 const router = express.Router();
 
+router.get("/user-likes", async (request: Request, response: Response, next: NextFunction) => {
+    try{
+        const user = jwt.getUserFromToken(request);
+        const userLikes = await logic.getAllUserLikes(user.id)
+        response.json(userLikes)
+    }
+    catch(err: any) {
+        next(err);
+    }
+})
+
 router.post("/like/:id", async (request: Request, response: Response, next: NextFunction) => {
     try{
         const vacationId = +request.params.id;
@@ -20,13 +31,13 @@ router.post("/like/:id", async (request: Request, response: Response, next: Next
     }
 })
 
-router.post("/dislike/:id", async (request: Request, response: Response, next: NextFunction) => {
+router.delete("/dislike/:id", async (request: Request, response: Response, next: NextFunction) => {
     try{
         const vacationId = +request.params.id;
         const user = jwt.getUserFromToken(request);
         const like = new LikeModel(user.id, vacationId);
-        const result = await logic.addDislike(like);
-        response.json(result);
+        await logic.deleteLike(like);
+        response.sendStatus(204);
     }
     catch(err: any) {
         next(err);
