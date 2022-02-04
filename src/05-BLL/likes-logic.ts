@@ -16,7 +16,7 @@ async function addLike(like: LikeModel): Promise<any> {
     return "You cant like vacation twice.."
 }
 
-async function addDislike(like: LikeModel): Promise<any> {
+async function deleteLike(like: LikeModel): Promise<void> {
     const isLiked = false;
 
     const valid = await logicHelpers.validateLike(like);
@@ -28,11 +28,17 @@ async function addDislike(like: LikeModel): Promise<any> {
         await logicHelpers.updateVacationsLikes(like, isLiked);
         return;
     }
-    return "You cant dislike a vacation you dont already like.."
+}
+
+async function getAllUserLikes(userId: number): Promise<LikeModel[]> {
+    const sql = `SELECT * FROM Likes WHERE UserID = ${userId}`;
+    const userLikes = await dal.execute(sql);
+    return userLikes;
 }
 
 
 export default {
     addLike,
-    addDislike
+    deleteLike,
+    getAllUserLikes
 }
