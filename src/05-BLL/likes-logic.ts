@@ -31,7 +31,7 @@ async function deleteLike(like: LikeModel): Promise<void> {
 }
 
 async function getAllUserLikes(userId: number): Promise<LikeModel[]> {
-    const sql = `SELECT * FROM Likes WHERE UserID = ${userId}`;
+    const sql = `SELECT UserID AS userId, VacationID AS vacationId FROM Likes WHERE UserID = ${userId}`;
     const userLikes = await dal.execute(sql);
     return userLikes;
 }
