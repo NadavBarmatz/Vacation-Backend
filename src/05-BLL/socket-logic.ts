@@ -20,23 +20,27 @@ function initSocketIo(httpServer: HttpServer): void {
 }
 
 function emitAddVacation(vacation: VacationModel): void {
-    socketIoServer.sockets.emit("admin-add-vacation", vacation)
+    socketIoServer.sockets.emit("admin-add-vacation", vacation);
 }
 
 function emitUpdateVacation(vacation: VacationModel): void {
-    socketIoServer.sockets.emit("admin-update-vacation", vacation)
+    socketIoServer.sockets.emit("admin-update-vacation", vacation);
 }
 
 function emitDeleteVacation(id: number): void {
-    socketIoServer.sockets.emit("admin-delete-vacation", id)
+    socketIoServer.sockets.emit("admin-delete-vacation", id);
 }
 
 function emitLike(like: LikeModel): void {
-    socketIoServer.sockets.emit("user-like-vacation", like)
+    socketIoServer.sockets.emit("user-like-vacation", like);
 }
 
 function emitDislike(Dislike: LikeModel): void {
-    socketIoServer.sockets.emit("user-dislike-vacation", Dislike)
+    socketIoServer.sockets.emit("user-dislike-vacation", Dislike);
+}
+
+function emitVacationLikesUpdate(vacation: VacationModel): void {
+    socketIoServer.sockets.emit("vacation-likes-update", vacation);
 }
 
 export default {

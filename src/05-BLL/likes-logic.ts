@@ -20,7 +20,6 @@ async function deleteLike(like: LikeModel): Promise<void> {
     const isLiked = false;
 
     const valid = await logicHelpers.validateLike(like);
-    console.log(valid);
     
     if(!valid){
         const sql = `DELETE FROM Likes WHERE UserID = ${like.userId} AND VacationID = ${like.vacationId}`;

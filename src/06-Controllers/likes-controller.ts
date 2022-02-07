@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import jwt from '../01-Utils/jwt';
+import verifyNotAdmin from '../02-Middleware/verify-not-admin';
+import verifyToken from '../02-Middleware/verify-token';
 import LikeModel from '../03-Models/like-model';
 import logic from "../05-BLL/likes-logic";
 
@@ -18,7 +20,7 @@ router.get("/user-likes", async (request: Request, response: Response, next: Nex
     }
 })
 
-router.post("/like/:id", async (request: Request, response: Response, next: NextFunction) => {
+router.post("/like/:id", verifyToken, verifyNotAdmin, async (request: Request, response: Response, next: NextFunction) => {
     try{
         const vacationId = +request.params.id;
         const user = jwt.getUserFromToken(request);
@@ -31,7 +33,7 @@ router.post("/like/:id", async (request: Request, response: Response, next: Next
     }
 })
 
-router.delete("/dislike/:id", async (request: Request, response: Response, next: NextFunction) => {
+router.delete("/dislike/:id", verifyToken, verifyNotAdmin, async (request: Request, response: Response, next: NextFunction) => {
     try{
         const vacationId = +request.params.id;
         const user = jwt.getUserFromToken(request);
