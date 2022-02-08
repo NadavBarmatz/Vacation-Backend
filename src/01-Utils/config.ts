@@ -9,7 +9,7 @@ class DevelopmentConfig extends Config{
         super();
         this.port = 3001;
         this.mySql = {host: "localhost", user: "root", password: "", database: "vacations_db"}; // change database name for current database use
-        this.loginExpiresIn = "12h";
+        this.loginExpiresIn = "24h";
     }
 }
 
