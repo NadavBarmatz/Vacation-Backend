@@ -3,6 +3,7 @@ import handleImages from '../01-Utils/handle-images';
 import ClientError from '../03-Models/client-error';
 import VacationModel from "../03-Models/vacation-model";
 import dal from "../04-DAL/dal";
+import socketLogic from './socket-logic';
 
 // Get all logic:
 async function getAllVacations(): Promise<VacationModel[]> {
@@ -41,6 +42,9 @@ async function getOneVacation(id: number): Promise<VacationModel> {
 
     const vacations = await dal.execute(sql);
     const vacation = vacations[0];
+
+    socketLogic.emitVacationLikesUpdate(vacation);
+
     return vacation;
 }
 
@@ -61,6 +65,9 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
 
     vacation.vacationId = result.insertId;
     vacation.likes = 0;
+
+    socketLogic.emitAddVacation(vacation);
+
     return vacation;
 }
 
@@ -86,6 +93,8 @@ async function fullUpdateVacation(vacation: VacationModel): Promise<VacationMode
     await dal.execute(sql);
 
     const updatedVacation = await getOneVacation(vacation.vacationId);
+
+    socketLogic.emitUpdateVacation(updatedVacation);
 
     return updatedVacation;
     
@@ -122,6 +131,8 @@ async function deleteVacation(id: number): Promise<void> {
     handleImages.deleteImageFromDb("./src/00-Images/" + oldVacation.imageName);
     const sql = `DELETE FROM Vacations WHERE VacationID = ${id}`;
     await dal.execute(sql);
+
+    socketLogic.emitDeleteVacation(id);
 }
 
 export default {
