@@ -6,6 +6,17 @@ import logic from "../05-BLL/destinations-logic";
 
 const router = express.Router();
 
+router.post("/auto-complete", async (request: Request, response: Response, next: NextFunction) => {
+    try{
+        const str = request.body.str;
+        const destinations = await logic.autoCompleteSearch(str);
+        response.json(destinations)
+    }
+    catch(err: any){
+        next(err);
+    }
+})
+
 router.get("/", async (request: Request, response: Response, next: NextFunction) => {
     try{
         const destinations = await logic.getAllDestinations();
