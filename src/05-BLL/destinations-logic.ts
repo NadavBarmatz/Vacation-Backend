@@ -3,17 +3,6 @@ import dal from "../04-DAL/dal";
 import DestinationModel from "../03-Models/destination-model";
 import ClientError from '../03-Models/client-error';
 
-async function autoCompleteSearch(str: string): Promise<DestinationModel[]> {
-    const sql = `SELECT DestinationID AS destinationId, 
-                 DestinationCity AS destinationCity, 
-                 DestinationCountry AS destinationCountry
-                 FROM Destinations
-                 WHERE DestinationCity LIKE '${str}%' OR DestinationCountry LIKE '${str}%'`;
-
-    const destinations = await dal.execute(sql);
-    return destinations;
-}
-
 async function getAllDestinations(): Promise<DestinationModel> {
     const sql = `SELECT DestinationID AS destinationId, DestinationCity AS destinationCity, DestinationCountry AS destinationCountry
                  FROM Destinations`;
@@ -54,6 +43,5 @@ export default {
     getAllDestinations,
     getOneDestinations,
     addDestination,
-    deleteDestination,
-    autoCompleteSearch
+    deleteDestination
 }
