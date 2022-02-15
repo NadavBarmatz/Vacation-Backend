@@ -19,6 +19,17 @@ router.get("/", async (request : Request, response: Response, next: NextFunction
     }
 });
 
+// GET ALL by destination id:
+router.get("/by-destination/:id", async (request : Request, response: Response, next: NextFunction) => {
+    try{
+        const id = +request.params.id;
+        const vacations = await logic.getAllVacationsByDestination(id);
+        response.json(vacations);
+    }
+    catch(err: any) {
+    }
+});
+
 // GET ONE:
 router.get("/:id", async (request : Request, response: Response, next: NextFunction) => {
     try{

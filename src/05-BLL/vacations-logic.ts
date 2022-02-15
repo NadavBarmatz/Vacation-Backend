@@ -24,6 +24,27 @@ async function getAllVacations(): Promise<VacationModel[]> {
     return vacations;
 }
 
+// GET all vacations by destination id:
+async function getAllVacationsByDestination(id: number): Promise<VacationModel[]> {
+    const sql = `SELECT VacationID AS vacationId,
+                 Vacations.DestinationID AS destinationId,
+                 VacationDescription AS description,
+                 Destinations.DestinationCity AS city,
+                 Destinations.DestinationCountry AS country,
+                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
+                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 Price AS price,
+                 NumberOfLikes AS likes,
+                 imageName
+                 FROM Vacations 
+                 JOIN Destinations ON Vacations.DestinationID = Destinations.DestinationID
+                 WHERE Vacations.DestinationID = ${id}`;
+
+    const vacations = await dal.execute(sql);
+
+    return vacations;
+}
+
 // Get one logic:
 async function getOneVacation(id: number): Promise<VacationModel> {
     const sql = `SELECT VacationID AS vacationId,
@@ -137,6 +158,7 @@ async function deleteVacation(id: number): Promise<void> {
 
 export default {
     getAllVacations,
+    getAllVacationsByDestination,
     getOneVacation,
     addVacation,
     fullUpdateVacation,
