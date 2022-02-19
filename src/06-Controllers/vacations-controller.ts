@@ -1,9 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
-import jwt from "../01-Utils/jwt";
 import verifyAdmin from "../02-Middleware/verify-admin";
-import verifyToken from "../02-Middleware/verify-token";
-import LikeModel from "../03-Models/like-model";
 import VacationModel from "../03-Models/vacation-model";
 import logic from "../05-BLL/vacations-logic";
 
@@ -16,6 +13,7 @@ router.get("/", async (request : Request, response: Response, next: NextFunction
         response.json(vacations);
     }
     catch(err: any) {
+        next(err);
     }
 });
 
@@ -27,6 +25,7 @@ router.get("/by-destination/:id", async (request : Request, response: Response, 
         response.json(vacations);
     }
     catch(err: any) {
+        next(err);
     }
 });
 
@@ -39,6 +38,7 @@ router.get("/:id", async (request : Request, response: Response, next: NextFunct
         response.json(vacation);
     }
     catch(err: any) {
+        next(err);
     }
 });
 

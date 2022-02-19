@@ -26,6 +26,9 @@ async function getAllVacations(): Promise<VacationModel[]> {
 
 // GET all vacations by destination id:
 async function getAllVacationsByDestination(id: number): Promise<VacationModel[]> {
+
+    if(isNaN(id)) throw new ClientError(404, "Destination not found. Search for a different location.");
+    
     const sql = `SELECT VacationID AS vacationId,
                  Vacations.DestinationID AS destinationId,
                  VacationDescription AS description,
@@ -41,6 +44,14 @@ async function getAllVacationsByDestination(id: number): Promise<VacationModel[]
                  WHERE Vacations.DestinationID = ${id}`;
 
     const vacations = await dal.execute(sql);
+    console.log(vacations)
+
+    console.log(vacations.length)
+
+    if(vacations.length === 0){
+        throw new ClientError(404, "Destination not found. Search for a different location.");
+    } 
+
 
     return vacations;
 }
