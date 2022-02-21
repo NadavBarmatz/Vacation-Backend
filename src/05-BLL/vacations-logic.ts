@@ -12,8 +12,8 @@ async function getAllVacations(): Promise<VacationModel[]> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
-                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
+                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -34,8 +34,8 @@ async function getAllVacationsByDestination(id: number): Promise<VacationModel[]
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
-                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
+                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -63,8 +63,8 @@ async function getOneVacation(id: number): Promise<VacationModel> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
-                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
+                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
