@@ -12,8 +12,8 @@ async function getAllVacations(): Promise<VacationModel[]> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
-                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -34,8 +34,8 @@ async function getAllVacationsByDestination(id: number): Promise<VacationModel[]
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
-                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -63,8 +63,8 @@ async function getOneVacation(id: number): Promise<VacationModel> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 DATE_FORMAT(StartDateTime, '%Y-%m-%d %H:%i') AS start,
-                 DATE_FORMAT(EndDateTime, '%Y-%m-%d %H:%i') AS end,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -74,6 +74,8 @@ async function getOneVacation(id: number): Promise<VacationModel> {
 
     const vacations = await dal.execute(sql);
     const vacation = vacations[0];
+
+    if(!vacation) throw new ClientError(404, "Vacation not found");
 
     socketLogic.emitVacationLikesUpdate(vacation);
 

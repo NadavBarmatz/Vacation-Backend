@@ -17,6 +17,7 @@ async function getOneDestinations(id: number): Promise<DestinationModel> {
 
     const destinations = await dal.execute(sql);
     const destination = destinations[0];
+    if(!destination) throw new ClientError(404, "Destination was not found")
     return destination;
 }
 
