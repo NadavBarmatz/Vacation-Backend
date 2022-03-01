@@ -12,8 +12,8 @@ async function getAllVacations(): Promise<VacationModel[]> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
-                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -24,6 +24,38 @@ async function getAllVacations(): Promise<VacationModel[]> {
     return vacations;
 }
 
+// GET all vacations by destination id:
+async function getAllVacationsByDestination(id: number): Promise<VacationModel[]> {
+
+    if(isNaN(id)) throw new ClientError(404, "Destination not found. Search for a different location.");
+    
+    const sql = `SELECT VacationID AS vacationId,
+                 Vacations.DestinationID AS destinationId,
+                 VacationDescription AS description,
+                 Destinations.DestinationCity AS city,
+                 Destinations.DestinationCountry AS country,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
+                 Price AS price,
+                 NumberOfLikes AS likes,
+                 imageName
+                 FROM Vacations 
+                 JOIN Destinations ON Vacations.DestinationID = Destinations.DestinationID
+                 WHERE Vacations.DestinationID = ${id}`;
+
+    const vacations = await dal.execute(sql);
+    console.log(vacations)
+
+    console.log(vacations.length)
+
+    if(vacations.length === 0){
+        throw new ClientError(404, "Destination not found. Search for a different location.");
+    } 
+
+
+    return vacations;
+}
+
 // Get one logic:
 async function getOneVacation(id: number): Promise<VacationModel> {
     const sql = `SELECT VacationID AS vacationId,
@@ -31,8 +63,8 @@ async function getOneVacation(id: number): Promise<VacationModel> {
                  VacationDescription AS description,
                  Destinations.DestinationCity AS city,
                  Destinations.DestinationCountry AS country,
-                 CONCAT(DATE_FORMAT(StartDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(StartDateTime, '%H:%i')) AS start,
-                 CONCAT(DATE_FORMAT(EndDateTime, '%Y-%m-%d'), ' ', TIME_FORMAT(EndDateTime, '%H:%i')) AS end,
+                 StartDateTime AS start,
+                 EndDateTime AS end,
                  Price AS price,
                  NumberOfLikes AS likes,
                  imageName
@@ -42,6 +74,8 @@ async function getOneVacation(id: number): Promise<VacationModel> {
 
     const vacations = await dal.execute(sql);
     const vacation = vacations[0];
+
+    if(!vacation) throw new ClientError(404, "Vacation not found");
 
     socketLogic.emitVacationLikesUpdate(vacation);
 
@@ -137,6 +171,7 @@ async function deleteVacation(id: number): Promise<void> {
 
 export default {
     getAllVacations,
+    getAllVacationsByDestination,
     getOneVacation,
     addVacation,
     fullUpdateVacation,

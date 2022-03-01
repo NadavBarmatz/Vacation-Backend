@@ -14,8 +14,6 @@ class VacationModel {
     public image: UploadedFile;
 
     public constructor(vacation: VacationModel){
-        console.log(vacation.vacationId);
-        
         this.vacationId = vacation.vacationId;
         this.destinationId = vacation.destinationId;
         this.description = vacation.description;

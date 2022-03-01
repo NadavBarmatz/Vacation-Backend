@@ -12,6 +12,7 @@ import authController from "./06-Controllers/auth-controller";
 import vacationsController from "./06-Controllers/vacations-controller";
 import likesController from "./06-Controllers/likes-controller";
 import destinationsController from "./06-Controllers/destinations-controller";
+import autoCompleteController from "./06-Controllers/auto-complete-controller"
 import socketLogic from "./05-BLL/socket-logic";
 
 // create the server:
@@ -25,6 +26,7 @@ server.use(express.json());
 server.use(expressFileUpload());
 
 // use controllers:
+server.use("/api/auto-complete", autoCompleteController);
 server.use("/api/users", usersController);
 server.use("/api/auth", authController);
 server.use("/api/destinations", destinationsController);
