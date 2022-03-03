@@ -1,4 +1,5 @@
 import { OkPacket } from 'mysql';
+import path from 'path';
 import handleImages from '../01-Utils/handle-images';
 import ClientError from '../03-Models/client-error';
 import VacationModel from "../03-Models/vacation-model";
@@ -111,9 +112,11 @@ async function fullUpdateVacation(vacation: VacationModel): Promise<VacationMode
     const errors = vacation.validatePut();
     if(errors) throw new ClientError(404, errors);
 
-    const oldImage = await getOneVacation(vacation.vacationId);
-    if(oldImage.imageName){
-        handleImages.deleteImageFromDb("./src/00-Images/" + oldImage.destinationId + "/" + oldImage.imageName)
+    const oldVacation = await getOneVacation(vacation.vacationId);
+    if(oldVacation.imageName){
+        const absolutePath = path.join(__dirname, "..", "00-Images", oldVacation.imageName);
+
+        handleImages.deleteImageFromDb(absolutePath)
     }
     handleImages.saveImageToDb(vacation);
     delete vacation.image;
@@ -134,35 +137,11 @@ async function fullUpdateVacation(vacation: VacationModel): Promise<VacationMode
     
 }
 
-// Partial update logic:
-async function partialUpdateVacation(vacation: VacationModel): Promise<VacationModel> {
-
-    // Validate patch:
-    const errors = vacation.validatePatch();
-    if(errors) throw new ClientError(404, errors);
-
-    const vacationDb = await getOneVacation(vacation.vacationId);
-
-    for(const prop in vacation){
-        if(vacation[prop] !== undefined){
-            vacationDb[prop] = vacation[prop];
-        }
-    }
-
-    console.log(vacationDb)
-    delete vacationDb.imageName;
-    delete vacationDb.likes;
-    delete (vacationDb as any).city;
-    delete (vacationDb as any).country;
-
-    const updatedVacation = await fullUpdateVacation(vacationDb);
-    return updatedVacation;
-}
-
 // Delete vacation logic:
 async function deleteVacation(id: number): Promise<void> {
     const oldVacation = await getOneVacation(id);
-    handleImages.deleteImageFromDb("./src/00-Images/" + oldVacation.imageName);
+    const absolutePath = path.join(__dirname, "..", "00-Images", oldVacation.imageName);
+    handleImages.deleteImageFromDb(absolutePath);
     const sql = `DELETE FROM Vacations WHERE VacationID = ${id}`;
     await dal.execute(sql);
 
@@ -175,6 +154,5 @@ export default {
     getOneVacation,
     addVacation,
     fullUpdateVacation,
-    partialUpdateVacation,
     deleteVacation
 }

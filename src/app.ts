@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config(); //change ENVIRONMENT to production on .env file b4 uploading to production
 
+import path from 'path';
 import cors from "cors";
 import expressFileUpload from "express-fileupload";
 import express, { NextFunction, Request, Response } from "express";
@@ -23,6 +24,8 @@ server.use(cors());
 
 // allow to use json on responses:
 server.use(express.json());
+
+server.use(express.static(path.join(__dirname, "./07-frontend")));
 server.use(expressFileUpload());
 
 // use controllers:
@@ -35,8 +38,7 @@ server.use("/api/likes", likesController);
 
 // handle error on route unknown:
 server.use("*", (request: Request, response: Response, next: NextFunction) => {
-    const error = new ClientError(404, "Route Not Found");
-    next(error);
+    response.sendFile(path.join(__dirname, "./07-frontend/index.html"));
 });
 
 // use errorHandler to handle errors:

@@ -70,20 +70,6 @@ router.put("/:id", verifyAdmin, async (request: Request, response: Response, nex
     }
 });
 
-// PATCH:
-router.patch("/:id", verifyAdmin, async (request: Request, response: Response, next: NextFunction) => {
-    try{
-        request.body.image = request.files?.image;
-        request.body.vacationId = request.params.id;
-        const vacation = new VacationModel(request.body);
-        const updatedVacation = await logic.partialUpdateVacation(vacation);
-        response.json(updatedVacation);
-    }
-    catch(err: any) {
-        next(err);
-    }
-});
-
 // Delete vacation:
 router.delete("/:id", verifyAdmin, async (request: Request, response: Response, next: NextFunction) => {
     try{
@@ -99,7 +85,7 @@ router.delete("/:id", verifyAdmin, async (request: Request, response: Response, 
 router.get("/images/:imageName", (request: Request, response: Response, next: NextFunction) => {
     try{
         const imageName = request.params.imageName;
-        const absolutePath = path.join(__dirname, "..", "00-images", imageName);
+        const absolutePath = path.join(__dirname, "..", "00-Images", imageName);
         response.sendFile(absolutePath);
     }
     catch(err: any) {

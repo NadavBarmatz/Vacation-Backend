@@ -9,7 +9,7 @@ async function saveImageToDb(vacation: VacationModel): Promise<void> {
 
     vacation.imageName = uuid() + extension;
 
-    await vacation.image.mv("./src/00-images/" + vacation.imageName);
+    await vacation.image.mv("./src/00-Images/" + vacation.imageName);
 
 }
 
